@@ -14,7 +14,7 @@ class CircularQueueDoublyIterator
 {
 
 private:
-	const DoublySortedLinkedList<T>& m_List;//링크드리스트의 리스트
+	const CircularQueueDoublyLinkedList<T>& m_List;//링크드리스트의 리스트
 	DoublyNodeType<T>* m_pCurPointer;//노드타입의 포인터
 	
 public:
@@ -32,6 +32,8 @@ public:
 	
 	T First();
 	T Next();
+	T Prev();
+	
 	T Getdata();
 	void Reset();
 	DoublyNodeType<T> GetCurrentNode();
@@ -69,9 +71,18 @@ T CircularQueueDoublyIterator<T> ::First()
 }
 
 template <typename T>
+T CircularQueueDoublyIterator<T> ::Prev()
+{
+	m_pCurPointer = m_pCurPointer->prev;
+	return m_pCurPointer->data;
+}
+
+
+
+
+template <typename T>
 T CircularQueueDoublyIterator<T> ::Next()
 {
-	if(m_pCur
 	m_pCurPointer = m_pCurPointer->next;
 	return m_pCurPointer->data;
 }

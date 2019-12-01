@@ -63,16 +63,26 @@ public:
 		*/
 
 		bool CheckEnd();//queue의 끝인지 아닌지 확인하는 함수
-	
+		
 		void Additem(T& item); //playlist에 아이템 추가
-		void insert_end();		//재생목록의 끝에 추가
-		void insert_pos();		//원하는 재생목록에 추가
-		void delete_pos();		//원하는 위치에 곡 제거
-		void search();			//primary key의 음악 검색
-		void update();			//갱신
-		void display();			//뮤직플레이어의 출력
-		void reverse();			//리스트 거꾸로 만들기
-	
+		
+		void Delete(T item);
+
+		/**
+		*	@brief	입력받은 아이템으로 정보를 바꾼다.
+		*	@pre	item을 입력받는다.
+		*	@post	새로운 정보로 교체된다.
+		*/
+		void Replace(T item);
+
+		/**
+		*	@brief	입력받은 아이템의 정보와 비교하여 같은 리스트의 아이템을 가져온다.
+		*	@pre	item을 입력받는다.
+		*	@post	검색된 데이터를 아이템에 넣는다.
+		*	@return	일치하는 데이터를 찾으면 1, 그렇지 않으면 0을 반환.
+		*/
+		int Get(T& item);
+
 		friend class CircularQueueDoublyIterator<T>; 
 		//Iterator와 친구 클래스
 
@@ -108,16 +118,17 @@ bool CircularQueueDoublyLinkedList<T>::IsEmpty() {
 
 template <typename T>
 bool CircularQueueDoublyLinkedList<T>::IsFull() {
-	if (m_nLength == 100) //100곡이면 FULL
+	if (m_nLength == 5) //100곡이면 FULL
 		return true;
 	else return false;
 
 }
 
+
 template <typename T>
 bool CircularQueueDoublyLinkedList<T> ::CheckEnd()
 {
-	if (m_pFirst->next->next==m_pLast)
+	if (m_nLength==5)
 		return true;
 	else
 		return false;
@@ -139,7 +150,8 @@ void CircularQueueDoublyLinkedList<T>::MakeEmpty() {
 	m_pFirst->prev = NULL;
 	m_pLast->prev = m_pFirst;
 	m_pLast->next=NULL:
-
+	
+	return;
 }
 
 template <typename T>
@@ -147,208 +159,118 @@ int CircularQueueDoublyLinkedList<T>::GetLength() const {
 	return m_nLength;
 }
 
+
 template <typename T>
 void CircularQueueDoublyLinkedList<T>::Additem(T& item) {
 	CircularQueueDoublyIterator itor(*this);
 	itor.Next();
-	if (m_pFirst ->next== m_pLast && m_pFirst == NULL) {
-
-	}
-
+	if (IsEmpty()) {//처음 삽입할때
+		DoublyNodeType<T>* pItem = new DoublyNodeType<T>;
+		pItem->data = item;
+		m_pFirst->next = pItem;
+		pItem->prev = m_pFirst;
+		pItem->next = m_pLast;
+		m_pLast->prev = pItem; // 처음과 끝 사이에 삽입.
 		m_nLength++;
-}
+		return 1;
+	}/*
+	else if (IsFull()) {
+		DoublyNodeType<T>* pItem = new DoublyNodeType<T>;
+		pItem->data = item;
+		for (int i = 0; i < m_Length - 3; i++) {
+			itor.Next();
+		}
 
-template <typename T>
-void CircularQueueDoublyLinkedList<T>::insert_end() {
-	int v;
-	cout << endl << "Enter the element to be inserted: ";
-	cin >> v;
-	struct nod* t;
-	t = create_node(v);
-	if (start == last && start == NULL) {
-		cout << "Element inserted in empty list" << endl;
-		start = last = t;
-		start->n = last->n = NULL;
-		start->p = last->p = NULL;
-	}
-	else {
-		last->n = t;
-		t->p = last;
-		last = t;
-		start->p = last;
-		last->n = start;
-	}
-}
-
-template <typename T>
-void CircularQueueDoublyLinkedList<T>::insert_pos() {
-	int v, pos, i;
-	cout << endl << "Enter the element to be inserted: ";
-	cin >> v;
-	cout << endl << "Enter the position of element inserted: ";
-	cin >> pos;
-	struct nod* t, * s, * ptr;
-	t = create_node(v);
-	if (start == last && start == NULL) {
-		if (pos == 1) {
-			start = last = t;
-			start->n = last->n = NULL;
-			start->p = last->p = NULL;
-		}
-		else {
-			cout << "Position out of range" << endl;
-			count--;
-			return;
-		}
-	}
-	else {
-		if (count < pos) {
-			cout << "Position out of range" << endl;
-			count--;
-			return;
-		}
-		s = start;
-		for (i = 1; i <= count; i++) {
-			ptr = s;
-			s = s->n;
-			if (i == pos - 1) {
-				ptr->n = t;
-				t->p = ptr;
-				t->n = s;
-				s->p = t;
-				cout << "Element inserted" << endl;
-				break;
+	}*/
+	else // 처음이 아닐 때
+	{
+		while (1)
+		{
+			if (!itor.NextNotNull())//마지막인지아닌지
+				//item < itor.m_pCurPointer->data ||  조건// 맞는 자리를 찾는다. 
+			{
+				DoublyNodeType<T>* pItem = new DoublyNodeType<T>;
+				pItem->data = item;
+				pItem->prev = itor.m_pCurPointer->prev;
+				pItem->next = itor.m_pCurPointer;
+				itor.m_pCurPointer->prev->next = pItem;
+				itor.m_pCurPointer->prev = pItem; // 아이템을 삽입.
+				m_nLength++;
+				return 1;
 			}
+			else if (item == itor.m_pCurPointer->data) // 같은 정보의 아이템이 있으면
+				return 0; // 0을 반환.
+			else
+				itor.Next(); // 다음으로 이동.
 		}
 	}
 }
 
-template <typename T>
-void CircularQueueDoublyLinkedList<T>::delete_pos() {
-	int pos, i;
-	nod* ptr, * s;
-	if (start == last && start == NULL) {
-		cout << "List is empty, nothing to delete" << endl;
-		return;
-	}
-	cout << endl << "Enter the position of element to be deleted: ";
-	cin >> pos;
-	if (count < pos) {
-		cout << "Position out of range" << endl;
-		return;
-	}
-	s = start;
-	if (pos == 1) {
-		count--;
-		last->n = s->n;
-		s->n->p = last;
-		start = s->n;
-		free(s);
-		cout << "Element Deleted" << endl;
-		return;
-	}
-	for (i = 0; i < pos - 1; i++) {
-		s = s->n;
-		ptr = s->p;
-	}
-	ptr->n = s->n;
-	s->n->p = ptr;
-	if (pos == count) {
-		last = ptr;
-	}
-	count--;
-	free(s);
-	cout << "Element Deleted" << endl;
-}
 
+// 입력받은 아이템을 데이터에서 찾아내어 삭제한다.
 template <typename T>
-void CircularQueueDoublyLinkedList<T>::update() {
-	int v, i, pos;
-	if (start == last && start == NULL) {
-		cout << "The List is empty, nothing to update" << endl;
-		return;
-	}
-	cout << endl << "Enter the position of node to be updated: ";
-	cin >> pos;
-	cout << "Enter the new value: ";
-	cin >> v;
-	struct nod* s;
-	if (count < pos) {
-		cout << "Position out of range" << endl;
-		return;
-	}
-	s = start;
-	if (pos == 1) {
-		s->info = v;
-		cout << "Node Updated" << endl;
-		return;
-	}
-	for (i = 0; i < pos - 1; i++) {
-		s = s->n;
-	}
-	s->info = v;
-	cout << "Node Updated" << endl;
-}
+void CircularQueueDoublyLinkedList<T>::Delete(T item)
+{
+	DoublyIterator<T> itor(*this);
+	itor.Next(); // 다음으로 이동.
 
-template <typename T>
-void CircularQueueDoublyLinkedList<T>::search() {
-	int pos = 0, v, i;
-	bool flag = false;
-	struct nod* s;
-	if (start == last && start == NULL) {
-		cout << "The List is empty, nothing to search" << endl;
-		return;
-	}
-	cout << endl << "Enter the value to be searched: ";
-	cin >> v;
-	s = start;
-	for (i = 0; i < count; i++) {
-		pos++;
-		if (s->info == v) {
-			cout << "Element " << v << " found at position: " << pos << endl;
-			flag = true;
+	while (itor.m_pCurPointer != m_pLast)
+	{
+		if (itor.m_pCurPointer->data == item) // 일치하는 데이터를 찾는다.
+		{
+			DoublyNodeType<T>* pItem = new DoublyNodeType<T>;
+			pItem = itor.m_pCurPointer;
+			itor.Next();
+			pItem->prev->next = itor.m_pCurPointer;
+			itor.m_pCurPointer->prev = pItem->prev; // 삭제하는 노드의 앞과 뒤를 서로 이어준다.
+			delete pItem; // 삭제.
+			m_nLength--; // 길이 감소.
+			return;
 		}
-		s = s->n;
+		else
+			itor.Next();
 	}
-	if (!flag)
-		cout << "Element not found in the list" << endl;
+	return;
 }
 
+// 입력받은 아이템의 정보를 교체한다.
 template <typename T>
-void CircularQueueDoublyLinkedList<T>::display() {
-	int i;
-	struct nod* s;
-	if (start == last && start == NULL) {
-		cout << "The List is empty, nothing to display" << endl;
-		return;
+void CircularQueueDoublyLinkedList<T>::Replace(T item)
+{
+	DoublyIterator<T> itor(*this);
+	itor.Next(); // 다음으로 이동.
+
+	while (itor.m_pCurPointer != m_pLast)
+	{
+		if (itor.m_pCurPointer->data == item)
+		{
+			itor.m_pCurPointer->data = item; // 정보를 교체.
+			return;
+		}
+		else
+			itor.Next();
 	}
-	s = start;
-	for (i = 0; i < count - 1; i++) {
-		cout << s->info << "<->";
-		s = s->n;
-	}
-	cout << s->info << endl;
+
+	return;
 }
 
+// 입력받은 아이템과 일치하는 아이템을 리스트에서 찾아 가져온다.
 template <typename T>
-void CircularQueueDoublyLinkedList<T>::reverse() {
-	if (start == last && start == NULL) {
-		cout << "The List is empty, nothing to reverse" << endl;
-		return;
-	}
-	struct nod* p1, * p2;
-	p1 = start;
-	p2 = p1->n;
-	p1->n = NULL;
-	p1->p = p2;
-	while (p2 != start) {
-		p2->p = p2->n;
-		p2->n = p1;
-		p1 = p2;
-		p2 = p2->p;
-	}
-	last = start;
-	start = p1;
-	cout << "List Reversed" << endl;
-}
+int CircularQueueDoublyLinkedList<T>::Get(T& item)
+{
+	DoublyIterator<T> itor(*this);
+	itor.Next();
 
+	while (itor.m_pCurPointer != m_pLast)
+	{
+		if (itor.m_pCurPointer->data == item)
+		{
+			item = itor.m_pCurPointer->data;
+			return 1; // 일치하면 1을 반환.
+		}
+		else
+			itor.Next(); // 다음으로 이동.
+	}
+
+	return 0; // 일치하지 않으면 0을 반환.
+}
