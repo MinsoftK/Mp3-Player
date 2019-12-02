@@ -11,185 +11,241 @@ ItemType::ItemType() {
 
 	SongName = "";
 	Singer = "";
-	SongMaker = "";
+	Composer = "";
 	genre = "";
 	MusicNumber = "";  //음악의 고유 ID
-	InTime = 0;
+	InTime = "";
 	Playnum = 0;
 
 }
 ItemType::~ItemType() {
 }
 
-
 string ItemType::GetSongName() {
 	return SongName;
 }
-string ItemType::GetSongMaker() {
-	return SongMaker;
+
+string ItemType::GetComposer() {
+	return Composer;
 }
+
+string ItemType::GetSongWriter() {
+	return SongWriter;
+}
+
 string ItemType::GetSinger() {
 	return Singer;
 }
+
 string ItemType::Getgenre() {
 	return genre;
 }
+
 string ItemType::GetMusicNumber() {
 	return MusicNumber;
 }
+
+string ItemType::GetLyric() {
+	return Lyric;
+}
+
+
+string ItemType::GetInTime() {
+	return InTime;
+}
+
 int ItemType::GetPlaynum() {
 	return Playnum;
 }
-int ItemType::GetInTime() {
-	return InTime;
+
+
+void ItemType::SetMusicNumber(string inMN) {
+	MusicNumber = inMN;
 }
+
 void ItemType::SetSongName(string inName) {
 	SongName = inName;
 }
 
-void ItemType::SetSongMaker(string inMaker) {
-	SongMaker = inMaker;
+void ItemType::SetSongWriter(string inSongWriter) {
+	SongWriter = inSongWriter;
 }
+
+void ItemType::SetInTime(string inInTime) {
+	InTime = inInTime;
+}
+
+void ItemType::SetComposer(string inComposer) {
+	Composer = inComposer;
+}
+
 void ItemType::SetSinger(string inSinger) {
 	Singer = inSinger;
 }
+
 void ItemType::Setgenre(string ingenre) {
 	genre = ingenre;
 }
-void ItemType::SetMusicNumber(string inMN) {
-	MusicNumber = inMN;
+
+
+void ItemType::SetLyric(string inLyric) {
+	Lyric = inLyric;
 }
+
+
+void ItemType::SetInTime(string inInTime) {
+	InTime = inInTime;
+}
+
 void ItemType::SetPlaynum(int inPlaynum) {
 	Playnum = inPlaynum;
 }
 
-void ItemType::SetInTime(int inInTime) {
-	InTime = inInTime;
-}
-
-
-
-void ItemType::SetRecord(string inMN, string inName, string inMaker, string inSinger, string ingenre, int inPlaynum, int inInTime) {
+void ItemType::SetRecord(string inMN, string inName, string inComposer, string inSongWriter,string inSinger,string ingenre,string inLyric, string inInTime, int inPlaynum) {
 	SetMusicNumber(inMN);
 	SetSongName(inName);
-	SetSongMaker(inMaker);
+	SetComposer(inComposer);
+	SetSongWriter(inSongWriter);
 	SetSinger(inSinger);
 	Setgenre(ingenre);
-	SetPlaynum(inPlaynum);
+	SetLyric(inLyric);
 	SetInTime(inInTime);
+	SetPlaynum(inPlaynum);
 }
+
+//////출력
+void ItemType::DisPlayMusicNumberOnScreen() {
+	cout << "\t음악번호: " << MusicNumber << endl;
+}
+
 
 void ItemType::DisPlaySongNameOnScreen() {
-	cout << "\tSongName: " << SongName << endl;
+	cout << "\t음악제목: " << SongName << endl;
 }
 
-void ItemType::DisPlaySongMakerOnScreen() {
-	cout << "\tSong Maker: " << SongMaker << endl;
+
+void ItemType::DisPlayComposerOnScreen() {
+	cout << "\t작곡가: " << Composer<< endl;
 }
+
+
+void ItemType::DisPlaySongWriterOnScreen() {
+	cout << "\t작사가: " << SongWriter<< endl;
+}
+
+
 void ItemType::DisPlaySingerOnScreen() {
-	cout << "\tSinger: " << Singer << endl;
+	cout << "\t가수: " << Singer << endl;
 }
+
 void ItemType::DisPlaygenreOnScreen() {
-	cout << "\tGenre : " << genre << endl;
+	cout << "\t장르 : " << genre << endl;
 }
-void ItemType::DisPlayMusicNumberOnScreen() {
-	cout << "\tMusicNumber: " << MusicNumber << endl;
+
+void ItemType::DisPlayLyricOnScreen(){
+	cout << "\t가사: " << Lyric << endl; 
+}
+
+void ItemType::DisPlayInTimeOnScreen() {
+	cout << "\t재생시간 : " << InTime<< endl;
 }
 
 void ItemType::DisPlayPlaynumOnScreen() {
-	cout << "\tPlaynum(재생횟수): " << Playnum << endl;
-}
-void ItemType::DisPlayInTimeOnScreen() {
-	cout << "\t등록된 순서: " << InTime << endl;
+	cout << "\t재생횟수 : " << Playnum<< endl;
 }
 
 void ItemType::DisPlayRecordOnScreen() {
-
+	
 	DisPlaySongNameOnScreen();
-	DisPlaySongMakerOnScreen();
 	DisPlaySingerOnScreen();
+	DisPlayComposerOnScreen();
+	DisPlaySongWriterOnScreen();
 	DisPlaygenreOnScreen();
-	DisPlayMusicNumberOnScreen();
-	DisPlayPlaynumOnScreen();
+	DisPlayLyricOnScreen();
 	DisPlayInTimeOnScreen();
+	DisPlayPlaynumOnScreen();
+	DisPlayMusicNumberOnScreen();
 }
 
 void ItemType::SetSongNameFromKB() {
-	cout << "\tSong Name: ";
-
+	cout << "\t노래제목: ";
 	cin >> SongName;
-
 }
 
-void ItemType::SetSongMakerFromKB() {
-	cout << "\tSongMaker: ";
-	cin >> SongMaker;
+void ItemType::SetComposerFromKB() {
+	cout << "\t작곡가: ";
+	cin >> Composer;
 }
 void ItemType::SetSingerFromKB() {
-	cout << "\tSinger: ";
+	cout << "\t가수: ";
 	cin >> Singer;
 }
 void ItemType::SetgenreFromKB() {
-	cout << "\tGenre : ";
+	cout << "\t장르: ";
 	cin >> genre;
 
 }
 void ItemType::SetMusicNumberFromKB() {
-	cout << "\tMusic Number: ";
+	cout << "\t음악번호: ";
 	cin >> MusicNumber;
 }
 
 
 void ItemType::SetRecordFromKB() {
-	SetMusicNumberFromKB();
 	SetSongNameFromKB();
 	SetSingerFromKB();
-	SetSongMakerFromKB();
+	SetComposerFromKB();
+	SetSongWriterFromKB();
 	SetgenreFromKB();
+	SetMusicNumberFromKB();
+	SetInTimeFromKB();
+	SetLyricFromKB();
+	SetPlaynumFromKB();
+
 
 }
 //파일에서 불러오는 것
 int ItemType::ReadDataFromFile(ifstream& fin) {
-
 	fin >> SongName;
 	fin >> Singer;
-	fin >> SongMaker;
+	fin >> Composer;
+	fin >> SongWriter;
 	fin >> genre;
 	fin >> MusicNumber;
-
+	fin >> InTime;
+	fin >> Lyric;
+	fin >> Playnum;
 	return 1;
 }
 int ItemType::WriteDataToFile(ofstream& fout) {
 
 	fout << setw(2) << SongName;
 	fout << setw(2) << Singer;
-	fout << setw(2) << SongMaker;
+	fout << setw(2) << Composer;
 	fout << setw(2) << genre;
 	fout << setw(2) << MusicNumber;
-
+	fout << setw(2) << InTime;
+	fout << setw(2) << Lyric;
+	fout << setw(2) << Playnum;
 	return 1;
 }
 
-
 bool ItemType::operator==(ItemType& data) {//MusicNumber 비교를 위한 연산자 오버로딩
 	if (data.GetMusicNumber() == MusicNumber) {
-		//DisplayRecordOnScreen();
 		return true;
 	}
 	else return false;
 
 }
 
-bool ItemType::operator+=(ItemType& data) {//genrer 비교를 위한 연산자 오버로딩
-	if (data.Getgenre() == genre) {
-		//DisplayRecordOnScreen();
+bool ItemType::operator>=(ItemType& data) {//genrer 비교를 위한 연산자 오버로딩
+	if (data.GetMusicNumber() >= MusicNumber) {
 		return true;
 	}
 	else return false;
 }
-bool ItemType::operator-=(ItemType& data) { //Singer 비교를 위한 연산자 오버로딩
-	if (data.GetSinger() == Singer) {
-		//DisplayRecordOnScreen();
+bool ItemType::operator<=(ItemType& data) { //Singer 비교를 위한 연산자 오버로딩
+	if (data.GetMusicNumber() <= MusicNumber) {
 		return true;
 	}
 	else return false;
@@ -207,10 +263,3 @@ bool ItemType::operator<(ItemType& data) {//이름 순서를 위한 연산자 오버로딩
 	}
 	else return false;
 }
-
-
-/*
-RelationType CompareByID(const ItemType& data) {
-
-}
-*/

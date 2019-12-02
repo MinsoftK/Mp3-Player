@@ -1,27 +1,30 @@
 #pragma once
-#include "CircularQueueDoublyLinkedList.h"
 
+
+#include <iostream>
+using namespace std;
 template<typename T>
 struct DoublyNodeType;
+
 template<typename T>
-class CircularQueueDoublyLinkedList;
+class DoublyLinkedList;
 
 /**
 *	연결리스트에서 쓰이는 Iterator의 클래스.
 */
 template <typename T>
-class CircularQueueDoublyIterator
+class DoublyIterator
 {
-
+	friend class DoublyLinkedList<T>;
 private:
-	const CircularQueueDoublyLinkedList<T>& m_List;//링크드리스트의 리스트
+	const DoublyLinkedList<T>& m_List;//링크드리스트의 리스트
 	DoublyNodeType<T>* m_pCurPointer;//노드타입의 포인터
 	
 public:
 	/**
 	*	디폴트 생성자.
 	*/
-	CircularQueueDoublyIterator(const CircularQueueDoublyLinkedList<T>& list) : m_List(list), m_pCurPointer(list.m_pFirst)
+	DoublyIterator(const DoublyLinkedList<T>& list) : m_List(list), m_pCurPointer(list.m_pFirst)
 	{}; ///< DoublySortedLinkedList와 친구 클래스.
 
 
@@ -37,15 +40,12 @@ public:
 	T Getdata();
 	void Reset();
 	DoublyNodeType<T> GetCurrentNode();
-	const DoublySortedLinkedList<T>& m_List;
-	DoublyNodeType<T>* m_pCurPointer;
-	friend class CircularQueueDoublyLinkedList<T>;
+
+	
 };
 
-//
 template <typename T>
-bool CircularQueueDoublyIterator<T> ::NotNull()
-{
+bool DoublyIterator<T>::NotNull(){
 	if (m_pCurPointer == NULL)
 		return false;
 	else
@@ -53,8 +53,7 @@ bool CircularQueueDoublyIterator<T> ::NotNull()
 }
 
 template <typename T>
-bool CircularQueueDoublyIterator<T> ::NextNotNull()
-{
+bool DoublyIterator<T>::NextNotNull(){
 	if (m_pCurPointer->next == NULL)
 		return false;
 	else
@@ -65,14 +64,12 @@ bool CircularQueueDoublyIterator<T> ::NextNotNull()
 
 
 template <typename T>
-T CircularQueueDoublyIterator<T> ::First()
-{
+T DoublyIterator<T>::First(){
 	return m_List.m_pFirst->data;
 }
 
 template <typename T>
-T CircularQueueDoublyIterator<T> ::Prev()
-{
+T DoublyIterator<T>::Prev(){
 	m_pCurPointer = m_pCurPointer->prev;
 	return m_pCurPointer->data;
 }
@@ -81,27 +78,23 @@ T CircularQueueDoublyIterator<T> ::Prev()
 
 
 template <typename T>
-T CircularQueueDoublyIterator<T> ::Next()
-{
+T DoublyIterator<T>::Next(){
 	m_pCurPointer = m_pCurPointer->next;
 	return m_pCurPointer->data;
 }
 
 template<typename T>
-T CircularQueueDoublyIterator<T>::Getdata()
-{
+T DoublyIterator<T>::Getdata(){
 	return m_pCurPointer->data;
 
 }
 
 template<typename T>
-void CircularQueueDoublyIterator<T>::Reset()
-{
+void DoublyIterator<T>::Reset(){
 	m_pCurPointer = m_List.m_pLast;
 }
 
 template <typename T>
-DoublyNodeType<T> CircularQueueDoublyIterator<T>::GetCurrentNode()
-{
+DoublyNodeType<T> DoublyIterator<T>::GetCurrentNode(){
 	return *m_pCurPointer;
 }

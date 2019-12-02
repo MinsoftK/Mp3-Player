@@ -15,65 +15,79 @@ using namespace std;
 class ItemType
 {
 protected:
-	string SongName;
-	string Singer;
-	string SongMaker;
-	string genre;
 	string MusicNumber;   //Primary key
-	int InTime;
-	int Playnum;
+	string SongName;	//곡이름 
+	string Singer;		//가수
+	string Composer;	//작곡가
+	string SongWriter; //작사가
+	string genre;		//장르
+	string Lyric;		//가사
+	string InTime;		//play 시간
+	int Playnum;		//play 횟수
 
 public:
-	ItemType();
+	ItemType() {
+		Playnum = 0;
+	}
 	~ItemType();
-
 
 	string GetSongName();	//노래제목
 	string GetSinger();		//가수
-	string GetSongMaker();	//작곡가
+	string GetComposer();	//작곡가
+	string GetSongWriter();	//작사가
 	string Getgenre();		//장르
 	string GetMusicNumber(); //음악의 고유 ID
-	int GetPlaynum();
-	int GetInTime();
-	//Set 변수에 값을 입력해줌
-
+	string GetLyric();		//가사를 return
+	string GetInTime();		//재생시간 return
+	int GetPlaynum();		//play 횟수 return
+	
+	//Set 변수에 파리미터 값을 입력해줌
 	void SetSongName(string inName);
 	void SetSinger(string inSinger);
-	void SetSongMaker(string inMaker);
+	void SetComposer(string inComposer);
+	void SetSongWriter(string inSongWriter);
 	void Setgenre(string ingenre);
 	void SetMusicNumber(string inMN);
+	void SetInTime(string inInTime);
+	void SetLyric(string inLyric);
 	void SetPlaynum(int inPlaynum);
-	void SetInTime(int inInTime);
-
-	void SetRecord(string inName, string inMaker, string inSinger, string ingenre, string inMN, int inPlaynum, int inInTime);
+	//전체 레코드 입력
+	void SetRecord(string inMN, string inName, string inComposer, string inSongWriter, string inSinger, string ingenre, string inLyric, string inInTime, int inPlaynum) {
 
 	//변수 값을 출력해줌.
-	void DisPlaySongNameOnScreen();
-	void DisPlaySingerOnScreen();
-	void DisPlaySongMakerOnScreen();
-	void DisPlaygenreOnScreen();
-	void DisPlayMusicNumberOnScreen();
-	void DisPlayPlaynumOnScreen();
-	void DisPlayInTimeOnScreen();
 
-	void DisPlayRecordOnScreen();
+		void DisPlaySongNameOnScreen();
+		void DisPlaySingerOnScreen();
+		void DisPlayComposerOnScreen();
+		void DisPlaySongWriterOnScreen();
+		void DisPlaygenreOnScreen();
+		void DisPlayLyricOnScreen();
+		void DisPlayInTimeOnScreen();
+		void DisPlayPlaynumOnScreen();
+		void DisPlayMusicNumberOnScreen();
+
+	void DisPlayRecordOnScreen();//전체출력
 
 	//키보드로부터 입력받은 값 넣어줌.
 	void SetSongNameFromKB();
 	void SetSingerFromKB();
-	void SetSongMakerFromKB();
+	void SetComposerFromKB();
+	void SetSongWriterFromKB();
 	void SetgenreFromKB();
 	void SetMusicNumberFromKB();
-
+	void SetInTimeFromKB();
+	void SetLyricFromKB();
+	void SetPlaynumFromKB();
 
 	void SetRecordFromKB();
+
 	int ReadDataFromFile(ifstream& fin);
 	int WriteDataToFile(ofstream& fout);
 
 	//연산자 오버로딩
-	bool operator==(ItemType& item); //Music Number 비교를 위한 연산자 오버로딩
-	bool operator+=(ItemType& data); //genrer 비교를 위한 연산자 오버로딩
-	bool operator-=(ItemType& data); //Singer 비교를 위한 연산자 오버로딩
+	bool operator==(ItemType& data); //Music Number 비교를 위한 연산자 오버로딩
+	bool operator>=(ItemType& data); 
+	bool operator<=(ItemType& data); 
 	bool operator>(ItemType& data);
 	bool operator<(ItemType& data);
 	//RelationType CompareById(const ItemType& data);

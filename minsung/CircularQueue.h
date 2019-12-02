@@ -1,7 +1,7 @@
 
 /*
 *	@brief	원형큐에 대한 선언부
-*	@date	2019.10.06
+*	@date	2019.10.06 
 *	@author	김민성
 */
 
@@ -86,7 +86,7 @@ private:
 	int m_iRear;	//index of the last element.
 	int m_nMaxQueue;	//max size of the queue.
 	T* m_pItems;	//pointer for dynamic allocation.
-	int order; //플레이된 횟수 변수
+	
 };
 
 //Allocate dynamic array whose size is maxQueue.
@@ -153,7 +153,7 @@ bool CircularQueue<T>::EnQueue(T item)
 
 	m_iRear = (m_iRear + 1) % m_nMaxQueue;
 	m_pItems[m_iRear] = item;	//m_iRear를 1증가시켜주고 item값을 넣어준다.
-
+	
 	return true;
 }
 
@@ -165,7 +165,7 @@ bool CircularQueue<T>::DeQueue()
 		return false;
 
 	m_iFront = (m_iFront + 1) % m_nMaxQueue;
-
+	
 	//item = m_pItems[m_iFront];	//m_iFront를 1 증가시켜주고 삭제될 값을 item에 복사해준다.
 	return true;
 }
@@ -179,7 +179,7 @@ bool CircularQueue<T>::DeQueue(T & item)
 
 	m_iFront = (m_iFront + 1) % m_nMaxQueue;
 	item = m_pItems[m_iFront];	//m_iFront를 1 증가시켜주고 삭제될 값을 item에 복사해준다.
-
+	
 	return true;
 }
 

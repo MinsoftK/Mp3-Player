@@ -14,15 +14,16 @@ struct DoublyNodeType {
 };
 
 template <typename T>
-class CircularQueueDoublyLinkedList
+class DoublyLinkedList
 { 
 private:
+	//DoublyNodeType<T> *Node;
+	DoublyNodeType<T> *m_pLast;
 	DoublyNodeType<T>* m_pFirst;
-	DoublyNodeType<T>* m_pLast;
 	int m_nLength;
 public:
-		CircularQueueDoublyLinkedList();
-		~CircularQueueDoublyLinkedList();
+		DoublyLinkedList();
+		~DoublyLinkedList();
 		
 		/**
 *	@brief	리스트가 가득 찼는지 아닌지 검사한다.
@@ -61,10 +62,8 @@ public:
 		*	@post	아이템을 리스트에 추가한다.
 		*	@return	같은 아이템이 있으면 0을 반환하고, 입력에 성공하면 1을 반환.
 		*/
-
-		bool CheckEnd();//queue의 끝인지 아닌지 확인하는 함수
 		
-		void Additem(T& item); //playlist에 아이템 추가
+		int Additem(const T& item); //playlist에 아이템 추가
 		
 		void Delete(T item);
 
@@ -81,90 +80,87 @@ public:
 		*	@post	검색된 데이터를 아이템에 넣는다.
 		*	@return	일치하는 데이터를 찾으면 1, 그렇지 않으면 0을 반환.
 		*/
+
 		int Get(T& item);
 
-		friend class CircularQueueDoublyIterator<T>; 
+		friend class DoublyIterator<T>; 
 		//Iterator와 친구 클래스
-
 };
-
 template <typename T>
-CircularQueueDoublyLinkedList<T>::CircularQueueDoublyLinkedList(){
-	//각 처음과 끝에 NodeType 선언 
+DoublyLinkedList<T> ::DoublyLinkedList(){
 	m_pFirst = new DoublyNodeType<T>;
 	m_pLast = new DoublyNodeType<T>;
 
-	m_pFirst->next = m_pLast;
-	m_pFirst->prev = NULL;
-	m_pLast->next = NULL;
-	m_pLast->prev = m_pFirst;
-	m_nLength = 0;
+	m_pFirst->next = m_pLast; // 끝과 처음이 서로를 가리키게 초기화.
+	m_pFirst->prev = NULL; // 처음.
+
+	m_pLast->next = NULL; // 끝.
+	m_pLast->prev = m_pFirst; // 끝과 처음이 서로를 가리키게 초기화.
+
+	m_nLength = 0; // 길이는 0.
 }
 
+// 소멸자.
 template <typename T>
-CircularQueueDoublyLinkedList<T>::~CircularQueueDoublyLinkedList() {
+DoublyLinkedList<T>::~DoublyLinkedList(){
 	delete m_pFirst;
 	delete m_pLast;
-
-}
-template <typename T>
-bool CircularQueueDoublyLinkedList<T>::IsEmpty() {
-	if (m_nLength == 0) { //길이가 0이면 true 반환
-		return true;
-	}
-	else return fasle;
 }
 
-
+// 리스트가 비었는지 검사한다.
 template <typename T>
-bool CircularQueueDoublyLinkedList<T>::IsFull() {
-	if (m_nLength == 5) //100곡이면 FULL
-		return true;
-	else return false;
-
-}
-
-
-template <typename T>
-bool CircularQueueDoublyLinkedList<T> ::CheckEnd()
-{
-	if (m_nLength==5)
+bool DoublyLinkedList<T>::IsEmpty(){
+	if (m_nLength == 0)
 		return true;
 	else
 		return false;
 }
 
-
+// 리스트가 꽉 차있는지 검사한다.
 template <typename T>
-void CircularQueueDoublyLinkedList<T>::MakeEmpty() {
-	DoublyNodeType<T>* pitem;
-	CircularQueueDoublyIterator<T> itor(*this);
-	
-	while (itor.NextNotNull()) {
-		pitem = itor.m_pCurPointer;
-		itor.Next();
-		delete pitem;
+bool DoublyLinkedList<T>::IsFull(){
+	if (m_nLength == 10)
+		return true;
+	else
+		return false;
+}
+
+// 리스트를 비운다.
+template <typename T>
+void DoublyLinkedList<T>::MakeEmpty(){
+	DoublyNodeType<T>* pItem;
+	DoublyIterator<T> itor(*this);
+	itor.Next(); // 다음으로 이동.
+
+	while (itor.NextNotNull())
+	{
+		pItem = itor.m_pCurPointer;
+		itor.Next(); // 현재 포인터를 다음으로 이동.
+		delete pItem;
 	}
 
 	m_pFirst->next = m_pLast;
 	m_pFirst->prev = NULL;
 	m_pLast->prev = m_pFirst;
-	m_pLast->next=NULL:
-	
+	m_pLast->next = NULL;
+
 	return;
 }
 
+// 리스트의 길이를 반환한다.
 template <typename T>
-int CircularQueueDoublyLinkedList<T>::GetLength() const {
+int DoublyLinkedList<T>::GetLength() const{
 	return m_nLength;
 }
 
-
+// 아이템을 입력받아 리스트의 맞는 자리를 찾아 삽입한다.
 template <typename T>
-void CircularQueueDoublyLinkedList<T>::Additem(T& item) {
-	CircularQueueDoublyIterator itor(*this);
-	itor.Next();
-	if (IsEmpty()) {//처음 삽입할때
+int DoublyLinkedList<T>::Additem(const T& item){
+	DoublyIterator<T> itor(*this);
+	itor.Next(); // 다음으로 이동.
+
+	if (IsEmpty()) // 처음 삽입할 때
+	{
 		DoublyNodeType<T>* pItem = new DoublyNodeType<T>;
 		pItem->data = item;
 		m_pFirst->next = pItem;
@@ -173,21 +169,12 @@ void CircularQueueDoublyLinkedList<T>::Additem(T& item) {
 		m_pLast->prev = pItem; // 처음과 끝 사이에 삽입.
 		m_nLength++;
 		return 1;
-	}/*
-	else if (IsFull()) {
-		DoublyNodeType<T>* pItem = new DoublyNodeType<T>;
-		pItem->data = item;
-		for (int i = 0; i < m_Length - 3; i++) {
-			itor.Next();
-		}
-
-	}*/
+	}
 	else // 처음이 아닐 때
 	{
 		while (1)
 		{
-			if (!itor.NextNotNull())//마지막인지아닌지
-				//item < itor.m_pCurPointer->data ||  조건// 맞는 자리를 찾는다. 
+			if (item < itor.m_pCurPointer->data || !itor.NextNotNull()) // 맞는 자리를 찾는다. //마지막인지아닌지
 			{
 				DoublyNodeType<T>* pItem = new DoublyNodeType<T>;
 				pItem->data = item;
@@ -206,13 +193,11 @@ void CircularQueueDoublyLinkedList<T>::Additem(T& item) {
 	}
 }
 
-
 // 입력받은 아이템을 데이터에서 찾아내어 삭제한다.
 template <typename T>
-void CircularQueueDoublyLinkedList<T>::Delete(T item)
-{
+void DoublyLinkedList<T>::Delete(T item){
 	DoublyIterator<T> itor(*this);
-	itor.Next(); // 다음으로 이동.
+	itor.Next();	//다음으로 이동.
 
 	while (itor.m_pCurPointer != m_pLast)
 	{
@@ -235,8 +220,7 @@ void CircularQueueDoublyLinkedList<T>::Delete(T item)
 
 // 입력받은 아이템의 정보를 교체한다.
 template <typename T>
-void CircularQueueDoublyLinkedList<T>::Replace(T item)
-{
+void DoublyLinkedList<T>::Replace(T item){
 	DoublyIterator<T> itor(*this);
 	itor.Next(); // 다음으로 이동.
 
@@ -256,8 +240,7 @@ void CircularQueueDoublyLinkedList<T>::Replace(T item)
 
 // 입력받은 아이템과 일치하는 아이템을 리스트에서 찾아 가져온다.
 template <typename T>
-int CircularQueueDoublyLinkedList<T>::Get(T& item)
-{
+int DoublyLinkedList<T>::Get(T & item){
 	DoublyIterator<T> itor(*this);
 	itor.Next();
 

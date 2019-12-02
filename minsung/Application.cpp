@@ -36,7 +36,7 @@ void Application::Run()
 			DisPlayAllMusic();
 			break;
 		case 6:
-			m_List.MakeEmpty();// 리스트에 입력된 모든 곡을 삭제
+			MasterList.MakeEmpty();// 리스트에 입력된 모든 곡을 삭제
 
 			break;
 		case 7:
@@ -100,7 +100,7 @@ int Application::AddMusic() {
 
 	ItemType item;
 	item.SetRecordFromKB();
-	m_List.Add(item);//Sorted 과정
+	MasterList.Add(item);//Sorted 과정
 	DisPlayAllMusic();
 
 	return 1;
@@ -108,13 +108,13 @@ int Application::AddMusic() {
 
 //Sorted 의 Delete 이용 Song Name 비교
 int Application::DeleteMusic() {
-	int pre = m_List.GetLength();//이전 item개수를 받아온다.
+	int pre = MasterList.GetLength();//이전 item개수를 받아온다.
 
 	ItemType item;
 	item.SetMusicNumberFromKB();
-	m_List.Delete(item);
+	MasterList.Delete(item);
 
-	if (pre > m_List.GetLength()) //이전 item개수보다 현재 item개수가 많아지면 제거성공
+	if (pre > MasterList.GetLength()) //이전 item개수보다 현재 item개수가 많아지면 제거성공
 	{
 		cout << "<========DELETE SUCCESS !===========>" << endl << endl;
 		cout << "\t Current List" << endl;
@@ -149,7 +149,7 @@ int Application::RetrieveMusic() {
 		cin >> SingerName;
 		ItemType item;
 		item.SetSinger(SingerName);
-		m_List.RetrieveBySinger(item);
+		MasterList.RetrieveBySinger(item);
 		item.DisPlayRecordOnScreen();
 		return 1;
 	}
@@ -158,7 +158,7 @@ int Application::RetrieveMusic() {
 		cin >> genre;
 		ItemType item;
 		item.Setgenre(genre);
-		m_List.RetrieveBygenre(item);
+		MasterList.RetrieveBygenre(item);
 		item.DisPlayRecordOnScreen();
 		return 1;
 
@@ -182,7 +182,7 @@ void Application::ReplaceMusic() {
 	cout << "Enter the music with new informations " << endl;
 	item.SetRecordFromKB();
 
-	m_List.Add(item);
+	MasterList.Add(item);
 	this->DisPlayAllMusic();
 	*/
 	string repMusic;
@@ -191,17 +191,17 @@ void Application::ReplaceMusic() {
 	ItemType data;
 	data.SetRecordFromKB();
 
-	m_List.ResetList();
-	int length = m_List.GetLength();
-	int curIndex = m_List.GetNextItem(data);
+	MasterList.ResetList();
+	int length = MasterList.GetLength();
+	int curIndex = MasterList.GetNextItem(data);
 	while (curIndex < length && curIndex != -1) {
 		if (repMusic == data.GetMusicNumber()) {
 			ItemType item;
-			item.SetRecord(data.GetMusicNumber(), data.GetSongName(), data.GetSinger(), data.GetSongMaker(), data.Getgenre(), data.GetPlaynum(), data.GetInTime());
-			m_List.Replace(item);
+			item.SetRecord(data.GetMusicNumber(), data.GetSongName(), data.GetSinger(), data.GetSongMaker(), data.Getgenre());
+			MasterList.Replace(item);
 			break;
 		}
-		curIndex = m_List.GetNextItem(data);
+		curIndex = MasterList.GetNextItem(data);
 	}
 	DisPlayAllMusic();
 }
@@ -215,11 +215,11 @@ void Application::DisPlayAllMusic() {
 	cout << "\n\tCurrent list" << endl;
 	cout << "\t=========================" << endl;
 	//마스터리스트 포인터 리셋
-	m_List.ResetList();
-	int length = m_List.GetLength();
-	int curIndex = m_List.GetNextItem(data);
+	MasterList.ResetList();
+	int length = MasterList.GetLength();
+	int curIndex = MasterList.GetNextItem(data);
 	for (int i = 0; i < length; i++) {
-		m_List.GetNextItem(data);
+		MasterList.GetNextItem(data);
 		data.DisPlayRecordOnScreen();
 		cout << "\t=========================" << endl;
 	}
@@ -256,7 +256,7 @@ int Application::ReadDataFromFile() {
 	{
 		// array에 학생들의 정보가 들어있는 structure 저장
 		data.ReadDataFromFile(m_InFile);
-		m_List.Add(data);
+		MasterList.Add(data);
 	}
 
 	m_InFile.close();	// file close
@@ -275,13 +275,13 @@ int Application::WriteDataToFile() {
 	if (!OpenOutFile(filename))
 		return 0;
 
-	m_List.ResetList();
-	int length = m_List.GetLength();
-	int curIndex = m_List.GetNextItem(item);
+	MasterList.ResetList();
+	int length = MasterList.GetLength();
+	int curIndex = MasterList.GetNextItem(item);
 	while (curIndex < length && curIndex != -1)
 	{
 		item.WriteDataToFile(m_OutFile);
-		curIndex = m_List.GetNextItem(item);
+		curIndex = MasterList.GetNextItem(item);
 	}
 
 	m_OutFile.close();	// file close
@@ -300,14 +300,14 @@ int Application::AddToPlayList() {
 	ItemType item;
 	play.SetMusicNumberFromKB();
 	item.SetMusicNumber(play.GetMusicNumber());
-	m_List.RetrieveByMusicNumber(item);
+	MasterList.RetrieveByMusicNumber(item);
 
 	play.SetRecord(item.GetMusicNumber(), item.GetPlaynum(), ++Order);
 
 	if (!(m_PlayList.IsFull())) {
 		//List가 Full이 아닐경우
 
-		if (m_List.RetrieveByMusicNumber(item)) {//Id가 Master에 존재할때 return 1
+		if (MasterList.RetrieveByMusicNumber(item)) {//Id가 Master에 존재할때 return 1
 			//item에 master 정보 저장.
 
 			m_PlayList.EnQueue(play);
@@ -363,7 +363,7 @@ void Application::PlayInsertOrder() {
 			break;
 		play.SetMusicNumber(num);//PlayItem 객체에 MN 받음
 		item.SetMusicNumber(num);//masterList와 비교할 key 입력
-		m_List.RetrieveByMusicNumber(item);
+		MasterList.RetrieveByMusicNumber(item);
 		item.SetPlaynum(++count);
 		play.SetRecord(item.GetMusicNumber(), item.GetPlaynum(), item.GetInTime());
 		//item에는 MusicNumber 일치하는 
@@ -383,7 +383,7 @@ void Application::DeletePlayList() {
 	ItemType item; //master List와 비교를 위한 객체 생성
 	play.SetMusicNumberFromKB();
 	item.SetMusicNumber(play.GetMusicNumber());
-	m_List.RetrieveByMusicNumber(item);
+	MasterList.RetrieveByMusicNumber(item);
 
 	if (!(m_PlayList.IsEmpty())) {
 		//List가 empty가 아닐경우

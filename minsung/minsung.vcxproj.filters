@@ -38,16 +38,16 @@
     <ClInclude Include="ItemType.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CircularQueueType.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CircularQueueDoublyIterator.h">
+    <ClInclude Include="CircularQueue.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CircularQueueDoublyLinkedList.h">
+    <ClInclude Include="DoublyIterator.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DoublyLinkedList.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

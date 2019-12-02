@@ -130,9 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
-    <ClInclude Include="CircularQueueDoublyIterator.h" />
-    <ClInclude Include="CircularQueueDoublyLinkedList.h" />
-    <ClInclude Include="CircularQueueType.h" />
+    <ClInclude Include="CircularQueue.h" />
+    <ClInclude Include="DoublyIterator.h" />
+    <ClInclude Include="DoublyLinkedList.h" />
     <ClInclude Include="ItemType.h" />
     <ClInclude Include="PlayItem.h" />
     <ClInclude Include="SortedLinkedList.h" />

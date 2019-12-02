@@ -14,9 +14,9 @@
 #include  "PlayItem.h"
 #include "SortedLinkedList.h"
 #include "SortedList.h"
-#include "CircularQueueType.h"
-#include "CircularQueueDoublyIterator.h"
-#include "CircularQueueDoublyLinkedList.h"
+#include "CircularQueue.h"
+#include "DoublyIterator.h"
+#include "DoublyLinkedList.h"
 #define FILENAMESIZE 1024
 using namespace std;
 
@@ -25,11 +25,9 @@ class Application
 private:
 	ifstream m_InFile; //input file descriptor
 	ofstream m_OutFile;//output file descriptor
-	SortedList<ItemType> m_List;//마스터 리스트
-	SortedLinkedList<ItemType> MasterList;
-	//SortedLinkedList<SingerType> SingerList;
-	//CircularQueue<PlayItem> m_PlayList;//템플릿에 PlayItem Class가 들어가는 m_PlayList
-	CircularQueueDoublyLinkedList<PlayItem> PlayList;
+	SortedList<ItemType> MasterList;//마스터 리스트
+	CircularQueue<PlayItem> m_PlayList;//템플릿에 PlayItem Class가 들어가는 m_PlayList
+	DoublyLinkedList<PlayItem> PlayList;
 	int m_Command;//current command number
 	int Order; //PlayList의 등록된 순서를 위한 변수
 
