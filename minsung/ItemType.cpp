@@ -9,11 +9,12 @@
 
 ItemType::ItemType() {
 
-	SongName = "";
+	SongName = "";//Primary Key
 	Singer = "";
 	Composer = "";
-	genre = "";
-	MusicNumber = "";  //음악의 고유 ID
+	genre = ""; 
+	Lyric = "";
+	MusicNumber = 0;  //음악의 순서
 	InTime = "";
 	Playnum = 0;
 
@@ -41,7 +42,7 @@ string ItemType::Getgenre() {
 	return genre;
 }
 
-string ItemType::GetMusicNumber() {
+int ItemType::GetMusicNumber() {
 	return MusicNumber;
 }
 
@@ -59,7 +60,7 @@ int ItemType::GetPlaynum() {
 }
 
 
-void ItemType::SetMusicNumber(string inMN) {
+void ItemType::SetMusicNumber(int inMN) {
 	MusicNumber = inMN;
 }
 
@@ -101,7 +102,7 @@ void ItemType::SetPlaynum(int inPlaynum) {
 	Playnum = inPlaynum;
 }
 
-void ItemType::SetRecord(string inMN, string inName, string inComposer, string inSongWriter,string inSinger,string ingenre,string inLyric, string inInTime, int inPlaynum) {
+void ItemType::SetRecord(int inMN, string inName, string inComposer, string inSongWriter,string inSinger,string ingenre,string inLyric, string inInTime, int inPlaynum) {
 	SetMusicNumber(inMN);
 	SetSongName(inName);
 	SetComposer(inComposer);
@@ -176,6 +177,10 @@ void ItemType::SetComposerFromKB() {
 	cout << "\t작곡가: ";
 	cin >> Composer;
 }
+void ItemType::SetSongWriterFromKB() {
+	cout << "\t작사가: ";
+	cin >> SongWriter;
+}
 void ItemType::SetSingerFromKB() {
 	cout << "\t가수: ";
 	cin >> Singer;
@@ -189,7 +194,20 @@ void ItemType::SetMusicNumberFromKB() {
 	cout << "\t음악번호: ";
 	cin >> MusicNumber;
 }
+void ItemType::SetInTimeFromKB() {
+	cout << "\t재생시간: ";
+	cin >> InTime;
+}
 
+void ItemType::SetLyricFromKB() {
+	cout << "\t가사: ";
+	cin >> Lyric;
+}
+
+void ItemType::SetPlaynumFromKB() {
+	cout << "\t재생횟수: ";
+	cin >> Playnum;
+}
 
 void ItemType::SetRecordFromKB() {
 	SetSongNameFromKB();
@@ -201,11 +219,9 @@ void ItemType::SetRecordFromKB() {
 	SetInTimeFromKB();
 	SetLyricFromKB();
 	SetPlaynumFromKB();
-
-
 }
 //파일에서 불러오는 것
-int ItemType::ReadDataFromFile(ifstream& fin) {
+int ItemType::ReadDataFromFile(ifstream& fin){
 	fin >> SongName;
 	fin >> Singer;
 	fin >> Composer;
@@ -230,8 +246,8 @@ int ItemType::WriteDataToFile(ofstream& fout) {
 	return 1;
 }
 
-bool ItemType::operator==(ItemType& data) {//MusicNumber 비교를 위한 연산자 오버로딩
-	if (data.GetMusicNumber() == MusicNumber) {
+bool ItemType::operator==(ItemType& data) {//음악 제목 비교를 위한 연산자 오버로딩
+	if (data.GetSongName() == SongName) {
 		return true;
 	}
 	else return false;
@@ -239,26 +255,26 @@ bool ItemType::operator==(ItemType& data) {//MusicNumber 비교를 위한 연산자 오버
 }
 
 bool ItemType::operator>=(ItemType& data) {//genrer 비교를 위한 연산자 오버로딩
-	if (data.GetMusicNumber() >= MusicNumber) {
+	if (data.GetSongName() >= SongName) {
 		return true;
 	}
 	else return false;
 }
 bool ItemType::operator<=(ItemType& data) { //Singer 비교를 위한 연산자 오버로딩
-	if (data.GetMusicNumber() <= MusicNumber) {
+	if (data.GetSongName() <= SongName) {
 		return true;
 	}
 	else return false;
 }
 
 bool ItemType::operator>(ItemType& data) {//이름 순서를 위한 연산자 오버로딩
-	if (data.GetMusicNumber() > MusicNumber) {
+	if (data.GetSongName() > SongName) {
 		return true;
 	}
 	else return false;
 }
 bool ItemType::operator<(ItemType& data) {//이름 순서를 위한 연산자 오버로딩
-	if (data.GetMusicNumber() < MusicNumber) {
+	if (data.GetSongName() < SongName) {
 		return true;
 	}
 	else return false;

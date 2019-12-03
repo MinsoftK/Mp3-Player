@@ -15,30 +15,35 @@ using namespace std;
 class PlayItem {
 
 private:
-	string MusicNumber; // Primary Key 는 공통으로 가지므로 Master 에서 얻어온다.
-	int Playcount; // 곡의 플레이 횟수
-	int InTime; // 곡이 들어온 순서
+	string SongName; // Primary Key 는 공통으로 가지므로 Master 에서 얻어온다.
+	string Singer;
+	int Playnum ;	//재생횟수
+	string InTime; // 재생시간
 
 public:
 
 	PlayItem() {
-		MusicNumber = "";
-		Playcount = 0;
-		InTime = 0;
+		SongName = "";	//노래제목
+		Singer = "";	//가수
+		Playnum = 0;	//재생횟수
+		InTime = "";	//재생시간
 	}
 	~PlayItem() {}
 
-	string GetMusicNumber();
+	string GetSongName();
+	string GetSinger();
+	string GetInTime();
 	int GetPlaycount();
-	int GetInTime();
+	
+	void SetSongName(string inName);
+	void SetSinger(string inSinger);
+	void SetPlaynum(int inPlaynum);
+	void SetInTime(string inInTime);
 
-	void SetMusicNumber(string MN);//music Number set
-	void SetPlaycount(int play);
-	void SetInTime(int Time);
-
-	void SetRecord(string inMusicNumber, int inplaycount, int inInTime) {
-		MusicNumber = inMusicNumber;
-		Playcount = inplaycount;
+	void SetRecord(string inName, string inSinger, int inPlaynum, string inInTime) {
+		SongName = inName;
+		Singer = inSinger;
+		Playnum = inPlaynum;
 		InTime = inInTime;
 	}
 
